@@ -20,6 +20,8 @@ int timeoutcount = 0;
 int position = 0;
 char textstring[] = "text, more text, and even more text!";
 
+
+
 /* Interrupt Service Routine */
 void user_isr(void)
 {
@@ -38,8 +40,15 @@ void user_isr(void)
       display_update();
       tick(&mytime);
       timeoutcount = 0;
-      display_image(position, icon);
+      int i,j, k;
+      for (i = 0; i < 4; i++) {
+        for (j = 0; j < 32; j++) {
+            screen[j*i] = icon[j*i];
+        }
+      };
+      display_image(position, screen);
       position++;
+      
     }
 
     timeoutcount++;
