@@ -20,6 +20,14 @@ int timeoutcount = 0;
 int position = 0;
 char textstring[] = "text, more text, and even more text!";
 
+void draw_mario() {
+      int x,y;
+      for (y = 2; y < 4; y++) {
+        for (x = 0; x < 16; x++) {
+            screen[128*y + x+32] = icon[16*(y-2) + x];
+        }
+      };
+}
 
 
 /* Interrupt Service Routine */
@@ -36,18 +44,28 @@ void user_isr(void)
     if (timeoutcount == 10)
     {
       time2string(textstring, mytime);
-      display_string(3, textstring);
-      display_update();
       tick(&mytime);
       timeoutcount = 0;
-      int i,j, k;
-      for (i = 0; i < 4; i++) {
-        for (j = 0; j < 32; j++) {
-            screen[j*i] = icon[j*i];
+      display_update();
+      int x,y,k;
+      int yco = 16;
+      int start = yco + 8;
+      draw_mario();
+      for (x = 0; x < 16; x++) {
+        for (y = yco; y < yco+16; y++) {
+            uint8_t band = icon[16*(y/start) + x];
+            
+            uint8_t bit = (band >> (y%8)) & 0x1;
+
+            bit_decision(x+position, y, bit);
         }
       };
+
       display_image(position, screen);
-      position++;
+      screen_clear(screen);
+
+      if (position >= 112) position = 111;
+      position++;      
       
     }
 
@@ -81,5 +99,5 @@ void labinit(void)
 void labwork(void)
 {
   prime = nextprime(prime);
-  display_string(0, itoaconv(prime));
+  
 }

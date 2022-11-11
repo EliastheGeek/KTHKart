@@ -184,6 +184,28 @@ void display_update(void) {
 	}
 }
 
+void screen_clear(uint8_t *screen) {
+  int i;
+
+  for (i = 0; i < 512; i++) screen[i] = 0;
+}
+
+void bit_decision(int x, int y, uint8_t bit) {
+  int row = y/8;
+
+  int coordinate = row*128 + x;
+
+  int bitPosition = y%8;
+  int bitActive = 1 << bitPosition;
+
+  if (bit == 1) {
+    screen[coordinate] |= bitActive; 
+  } else {
+    screen[coordinate] &= ~bitActive; 
+  }
+  
+}
+
 /* Helper function, local to this file.
    Converts a number to hexadecimal ASCII digits. */
 static void num32asc( char * s, int n ) 
