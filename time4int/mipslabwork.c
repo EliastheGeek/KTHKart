@@ -29,6 +29,20 @@ void draw_mario() {
       };
 }
 
+void draw(int xco ,int yco, int width, int height) {
+      int x,y;
+      int ystart = yco + 8;
+
+      for (x = xco; x < xco+width; x++) {
+        for (y = yco; y < yco+height; y++) {
+            uint8_t band = icon[width*(y/ystart) + x-xco];
+            
+            uint8_t bit = (band >> (y%8)) & 0x1;
+
+            bit_decision(x, y, bit, screen);
+        }
+      };
+}
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -47,21 +61,10 @@ void user_isr(void)
       tick(&mytime);
       timeoutcount = 0;
       display_update();
-      int x,y,k;
-      int yco = 16;
-      int start = yco + 8;
       draw_mario();
-      for (x = 0; x < 16; x++) {
-        for (y = yco; y < yco+16; y++) {
-            uint8_t band = icon[16*(y/start) + x];
-            
-            uint8_t bit = (band >> (y%8)) & 0x1;
 
-            bit_decision(x+position, y, bit);
-        }
-      };
-
-      display_image(position, screen);
+      draw(position, 16, 16, 16);
+      display_screen(screen);
       screen_clear(screen);
 
       if (position >= 112) position = 111;

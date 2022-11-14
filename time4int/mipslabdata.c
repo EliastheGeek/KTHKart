@@ -150,3 +150,6 @@ uint8_t screen[] = {
 
 };
 
+uint8_t racemap[] = {
+
+};

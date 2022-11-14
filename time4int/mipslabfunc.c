@@ -141,7 +141,7 @@ void display_string(int line, char *s) {
 			textbuffer[line][i] = ' ';
 }
 
-void display_image(int x, const uint8_t *data) {
+void display_screen(const uint8_t *data) {
 	int i, j;
 	
 	for(i = 0; i < 4; i++) {
@@ -190,7 +190,7 @@ void screen_clear(uint8_t *screen) {
   for (i = 0; i < 512; i++) screen[i] = 0;
 }
 
-void bit_decision(int x, int y, uint8_t bit) {
+void bit_decision(int x, int y, uint8_t bit, uint8_t *screen) {
   int row = y/8;
 
   int coordinate = row*128 + x;
