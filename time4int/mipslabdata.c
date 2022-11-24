@@ -149,7 +149,3 @@ const uint8_t const icon[] = {
 uint8_t screen[] = {
 
 };
-
-uint8_t racemap[] = {
-
-};

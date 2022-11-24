@@ -12,12 +12,13 @@
 
 #include <stdint.h>  /* Declarations of uint_32 and the like */
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
+#include <math.h>
 #include "mipslab.h" /* Declatations for these labs */
 
 int mytime = 0x5957;
 int prime = 1234567;
 int timeoutcount = 0;
-int position = 0;
+float position = 0;
 char textstring[] = "text, more text, and even more text!";
 
 void draw_mario() {
@@ -29,20 +30,7 @@ void draw_mario() {
       };
 }
 
-void draw(int xco ,int yco, int width, int height) {
-      int x,y;
-      int ystart = yco + 8;
 
-      for (x = xco; x < xco+width; x++) {
-        for (y = yco; y < yco+height; y++) {
-            uint8_t band = icon[width*(y/ystart) + x-xco];
-            
-            uint8_t bit = (band >> (y%8)) & 0x1;
-
-            bit_decision(x, y, bit, screen);
-        }
-      };
-}
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -55,24 +43,25 @@ void user_isr(void)
 
   if (IFS(0) & 0x100)
   {
-    if (timeoutcount == 10)
+    display_update();   
+    
+    draw((int)position, 16, 16, 16, icon);
+    display_screen(screen);
+    screen_clear(screen);
+    renderBackground();
+    
+    /*
+    if (timeoutcount == 2)
     {
       time2string(textstring, mytime);
       tick(&mytime);
-      timeoutcount = 0;
-      display_update();
-      draw_mario();
-
-      draw(position, 16, 16, 16);
-      display_screen(screen);
-      screen_clear(screen);
-
-      if (position >= 112) position = 111;
-      position++;      
+      timeoutcount = 0;  
       
     }
 
     timeoutcount++;
+    */
+
     IFSCLR(0) = 0x100;
   }
 
@@ -95,12 +84,16 @@ void labinit(void)
   IEC(0) = 0x900;
   IPC(2) = 0x4000004;
   enable_interrupt();
+  skybox();
 
   return;
 }
 /* This function is called repetitively from the main program */
 void labwork(void)
 {
-  prime = nextprime(prime);
-  
+  if ((getbtns() & 0x1) == 0x1)
+			position += 0.001f;
+
+	  if (((getbtns() >> 1) & 0x1) == 0x1)
+		  position -= 0.001f;
 }
