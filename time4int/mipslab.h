@@ -14,7 +14,7 @@ void display_string(int line, char *s);
 void display_update(void);
 void screen_clear(uint8_t *screen);
 void bit_decision(int x, int y, uint8_t bit, uint8_t *screen);
-void trackCreate();
+void oneTimebuild();
 void renderBackground();
 void draw(int xco ,int yco, int width, int height, const uint8_t *icon);
 uint8_t spi_send_recv(uint8_t data);

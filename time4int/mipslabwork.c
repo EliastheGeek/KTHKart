@@ -84,7 +84,7 @@ void labinit(void)
   IEC(0) = 0x900;
   IPC(2) = 0x4000004;
   enable_interrupt();
-  skybox();
+  oneTimebuild();
 
   return;
 }
