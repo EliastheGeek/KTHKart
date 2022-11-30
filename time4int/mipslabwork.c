@@ -14,12 +14,15 @@
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
 #include <math.h>
 #include "mipslab.h" /* Declatations for these labs */
+#include "charstructs.h"
 
 int mytime = 0x5957;
 int prime = 1234567;
 int timeoutcount = 0;
 float position = 0;
 char textstring[] = "text, more text, and even more text!";
+extern struct Kart bowser;
+extern struct Kart mario;
 
 void draw_mario() {
       int x,y;
@@ -29,8 +32,6 @@ void draw_mario() {
         }
       };
 }
-
-
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -43,9 +44,18 @@ void user_isr(void)
 
   if (IFS(0) & 0x100)
   {
-    display_update();   
-    
-    draw((int)position, 16, 16, 16, icon);
+    display_update();
+
+    if ((getbtns() & 0x1) == 0x1) {
+			position += 2.5f;
+      draw((int)position, 16, 15, 17, mario.rightturn);
+
+	  } else if (((getbtns() >> 1) & 0x1) == 0x1) {
+		  position -= 2.5f;
+      draw((int)position, 16, 15, 17, mario.leftturn);
+    } else
+      draw((int)position, 16, 15, 17, mario.normal);
+
     display_screen(screen);
     screen_clear(screen);
     renderBackground();
@@ -91,9 +101,4 @@ void labinit(void)
 /* This function is called repetitively from the main program */
 void labwork(void)
 {
-  if ((getbtns() & 0x1) == 0x1)
-			position += 0.001f;
-
-	  if (((getbtns() >> 1) & 0x1) == 0x1)
-		  position -= 0.001f;
 }

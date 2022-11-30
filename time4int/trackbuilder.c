@@ -19,7 +19,7 @@ void oneTimebuild()
 
 		trackParts[0] = (Vector) {0.0f, 10.0f};
 		trackParts[1] = (Vector) {0.0f, 10.0f};
-		trackParts[2] = (Vector) {0.5f, 20.0f};
+		trackParts[2] = (Vector) {0.5f, 200.0f};
 		trackParts[3] = (Vector) {0.0f, 30.0f};
 		trackParts[4] = (Vector) {1.0f, 20.0f};
 		trackParts[5] = (Vector) {-1.0f, 10.0f};
@@ -58,21 +58,20 @@ void oneTimebuild()
 		bit_decision(99, 5, 1, screen);
 		bit_decision(99, 6, 1, screen);
         	
-	  	for (x = 0; x < 51; x++) bit_decision(x, 7, 1, screen);
-		for (x = 77; x < 128; x++) bit_decision(x, 7, 1, screen);
+	  	for (x = 0; x < 128; x++) bit_decision(x, 7, 1, screen);
 	}
 
 void renderBackground()
 	{
 		if (((getbtns() >> 2) & 0x1) == 0x1)
-		  	speed += 0.2f;
+		  	speed += 0.05f;
 		else 
-			speed -= 0.1f;
+			speed -= 0.02f;
 		
 		if (speed < 0.0f) speed = 0.0f;
 		if (speed > 1.0f) speed = 1.0f;
 
-		distance += 30.0f*speed;
+		distance += 2.0f*speed;
 
 		int selectedSection = 0;
 		float sectionCheck = 0;
@@ -87,23 +86,34 @@ void renderBackground()
 		float targetCuvatureD = (targetCurvature-curvature) * 0.1f;
 		curvature += targetCuvatureD;
 
-		int y, x, sideColor;
+		int y, x, xco, width, sideColor;
+
+		if (curvature > 0) {
+			xco = 19;
+			width = 128;
+		} else if (curvature < 0) {
+			xco = 0;
+			width = 109;
+		} else {
+			xco = 19;
+			width = 109;
+		}
 		
 		for (y = 0; y < 24; y++)
 		{
 			float perspective = (float) y / 24;
-			float screenMid = 0.5f + curvature*(1.0f - perspective)*(1.0f - perspective);
+			float screenMid = 0.5f + curvature*(1.0f - perspective)*(1.0f - perspective)*(1.0f - perspective);
+			float roadWidth = 0.2f + perspective*0.5f;
+			roadWidth *= 0.5f;
 
 			int row = y + 8;
 
-			for (x = 19; x < 109; x++)
-			{
-				float roadWidth = 0.2f + perspective*0.5f; //Flytta till y-loopen 
-				roadWidth *= 0.5f;
+			int leftDirt = (screenMid-roadWidth)*128;
+			int rightDirt = (screenMid+roadWidth)*128;
+			int border = 24*roadWidth;
 
-				int leftDirt = (screenMid-roadWidth)*128;
-				int rightDirt = (screenMid+roadWidth)*128;
-				int border = 24*roadWidth;
+			for (x = xco; x < width; x++)
+			{
 
 				if (x >= leftDirt && x < leftDirt+border) {
 					sideColor = sinf(40.0f * ((1.0f - perspective)*(1.0f - perspective)) + ((int)distance%26)) > 0.0f ? 1 : 0;
