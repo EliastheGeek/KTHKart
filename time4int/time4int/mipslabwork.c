@@ -14,23 +14,14 @@
 #include <pic32mx.h> /* Declarations of system-specific addresses etc */
 #include <math.h>
 #include "mipslab.h" /* Declatations for these labs */
+#include "charstructs.h"
 
-int mytime = 0x5957;
+int mytime = 0x0000;
 int prime = 1234567;
 int timeoutcount = 0;
-float position = 0;
-char textstring[] = "text, more text, and even more text!";
-
-void draw_mario() {
-      int x,y;
-      for (y = 2; y < 4; y++) {
-        for (x = 0; x < 16; x++) {
-            screen[128*y + x+32] = icon[16*(y-2) + x];
-        }
-      };
-}
-
-
+char textstring[] = "";
+extern struct Kart bowser;
+extern struct Kart mario;
 
 /* Interrupt Service Routine */
 void user_isr(void)
@@ -43,24 +34,31 @@ void user_isr(void)
 
   if (IFS(0) & 0x100)
   {
-    display_update();   
-    
-    draw((int)position, 16, 16, 16, icon);
+  
+    if ((getbtns() & 0x1) == 0x1) {
+			mario.x += 2.5f;
+      draw((int)mario.x, 16, 15, 17, bowser.rightturn);
+
+	  } else if (((getbtns() >> 1) & 0x1) == 0x1) {
+		  mario.x -= 2.5f;
+      draw((int)mario.x, 16, 15, 17, bowser.leftturn);
+    } else
+      draw((int)mario.x, 16, 15, 17, bowser.normal);
+
     display_screen(screen);
     screen_clear(screen);
-    renderBackground();
+
+    renderBackground(); 
     
-    /*
-    if (timeoutcount == 2)
+    if (timeoutcount == 10)
     {
       time2string(textstring, mytime);
       tick(&mytime);
       timeoutcount = 0;  
-      
     }
-
     timeoutcount++;
-    */
+    display_string(2, textstring);
+    display_update(2, 0, 15, 5);   
 
     IFSCLR(0) = 0x100;
   }
@@ -91,9 +89,4 @@ void labinit(void)
 /* This function is called repetitively from the main program */
 void labwork(void)
 {
-  if ((getbtns() & 0x1) == 0x1)
-			position += 0.001f;
-
-	  if (((getbtns() >> 1) & 0x1) == 0x1)
-		  position -= 0.001f;
 }

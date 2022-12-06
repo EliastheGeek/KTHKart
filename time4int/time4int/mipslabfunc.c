@@ -86,7 +86,6 @@ void display_debug( volatile int * const addr )
   display_string( 2, "Data" );
   num32asc( &textbuffer[1][6], (int) addr );
   num32asc( &textbuffer[2][6], *addr );
-  display_update();
 }
 
 uint8_t spi_send_recv(uint8_t data) {
@@ -160,27 +159,19 @@ void display_screen(const uint8_t *data) {
 	}
 }
 
-void display_update(void) {
-	int i, j, k;
+void display_update(int line, int x, int y,  int width) {
+	int i, j, k,l;
 	int c;
-	for(i = 0; i < 4; i++) {
-		DISPLAY_CHANGE_TO_COMMAND_MODE;
-		spi_send_recv(0x22);
-		spi_send_recv(i);
+	for(j = 0; j < width; j++) {
+		c = textbuffer[line][j];
 		
-		spi_send_recv(0x0);
-		spi_send_recv(0x10);
-		
-		DISPLAY_CHANGE_TO_DATA_MODE;
-		
-		for(j = 0; j < 16; j++) {
-			c = textbuffer[i][j];
-			if(c & 0x80)
-				continue;
-			
-			for(k = 0; k < 8; k++)
-				spi_send_recv(font[c*8 + k]);
-		}
+		for(k = 0; k < 8; k++) {
+      uint8_t band = font[c*8+k];
+      for (l = 0; l < 8; l++) {
+        uint8_t bit = ((band >> (l%8)) & 0x1);
+        bit_decision(j*6+k+x, y+l, bit, screen);
+      }
+    }
 	}
 }
 

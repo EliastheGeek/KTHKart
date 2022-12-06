@@ -11,7 +11,7 @@
 void display_screen(const uint8_t *data);
 void display_init(void);
 void display_string(int line, char *s);
-void display_update(void);
+void display_update(int line, int x, int y,  int width);
 void screen_clear(uint8_t *screen);
 void bit_decision(int x, int y, uint8_t bit, uint8_t *screen);
 void oneTimebuild();
