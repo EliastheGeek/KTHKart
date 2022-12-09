@@ -99,17 +99,13 @@ void renderBackground()
 		int selectedSection = 0;
 		float sectionCheck = 0;
 
-		if (distance > 100) {
+		if (distance > 955) {
 			distance = 0;
 			selectedSection = 0;
 			sectionCheck = 0;
 			timeArray[lapcount-1] = mytime;
 			mytime = 0x0000;
 			lapcount++;
-			if (lapcount > 3) {
-      			screen_clear(0, screen);
-      			gamestate = 3;
-    		}
 		}
 
 		while (selectedSection < 14 && sectionCheck <= distance) {
@@ -132,14 +128,14 @@ void renderBackground()
 		int y, x, xco, width, sideColor;
 
 		if (curvature > 0) {
-			xco = 19; //(0.5f - roadwidth_float) * 128;
+			xco = 19;
 			width = 128;
 		} else if (curvature < 0) {
 			xco = 0;
-			width = 109;  //(0.5f + roadwidth_float) * 128;
+			width = 109;
 		} else {
-			xco = 19; //(0.5f - roadwidth_float) * 128;
-			width = 109; //(0.5f + roadwidth_float) * 128;
+			xco = 19;
+			width = 109;
 		}
 		
 		for (y = 0; y < 24; y++)
@@ -147,7 +143,7 @@ void renderBackground()
 			float perspective = (float) y / 24;
 			float screenMid = 0.5f + curvature*(1.0f - perspective)*(1.0f - perspective)*(1.0f - perspective);
 			float roadWidth = 0.2f + perspective*0.5f;
-			roadWidth *= 0.5f//roadwidth_float; //lägga en annan float här.
+			roadWidth *= 0.5f;
 
 			int row = y + 8;
 

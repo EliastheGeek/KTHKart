@@ -28,7 +28,7 @@ void title_screen(void) {
     display_screen(screen);
     if (((getbtns() >> 2) & 0x1) == 0x1) {
         delay(1000);
-        gamestate = 4;
+        gamestate = 1;
         screen_clear(0, screen);
 
     }
@@ -55,12 +55,6 @@ void game(void) {
     screen_clear(128, screen);
 
     renderBackground();
-
-    if (lapcount > 3) {
-        delay(200);
-      	gamestate = 3;
-				screen_clear(0, screen);
-    }
     
     if (timeoutcount == 10)
     {
@@ -78,10 +72,15 @@ void game(void) {
     //sprintf(lapcount_char, "%d", lapcount);
     display_update(1, 121, 15, 2);
     display_string(1, lapcount_char);
+
+    if (lapcount > 3) {
+        delay(1500);
+      	gamestate = 3;
+				screen_clear(0, screen);
+    }
 };
 
 void high_score(void) {
-  screen_clear(0, screen);
   display_string(0, "Here are your times");
   display_update(0, 0, 0, 20);
 
@@ -112,15 +111,22 @@ void high_score(void) {
   display_update(3, 0, 24, 13);
 
   display_screen(screen);
+  screen_clear(0, screen);
 
   if (((getbtns() >> 2) & 0x1) == 0x1) {
-        gamestate = 4;
-        screen_clear(0, screen);
+    gamestate = 4;
+    screen_clear(0, screen);
 
-    }
+  }
 }
 
 void end_screen(void){
+  draw((int)dvdX, (int)dvdY, 20, 20, dvd, 0);
+
+  dvdY += yspeed;
+  dvdX += xspeed;
+
+  display_screen(screen);
   if (dvdY + 14 >= 32) {
     yspeed = -yspeed;
   }
@@ -136,13 +142,9 @@ void end_screen(void){
   if (dvdX <= 0) {
     xspeed = -xspeed;
   }
+  display_string(3, itoaconv((int)dvdX));
+  display_update(3, 0, 24, 3);
 
-  dvdY += yspeed;
-  dvdX += xspeed;
-
-  draw((int)dvdX, (int)dvdY, 20, 20, dvd, 0);
-
-  display_screen(screen);
   screen_clear(0, screen);
 
 }
