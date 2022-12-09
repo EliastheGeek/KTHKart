@@ -44,5 +44,38 @@ struct Kart* choose_character(void) {
             return &bowser;
     }
 }
+/*
+int choose_difficulty(void){    
+    if (left_right == 0){
+        draw(39, 12, 20, 20, mario_logo, 1);
+        draw(69, 12, 20, 20, bowser_logo,0);
+        display_screen(screen);
+        screen_clear(0, screen);
+        //easy
+        //roadwidth = ;
+    }
+    else if (left_right == 1){
+        draw(39, 12, 20, 20, mario_logo, 0);
+        draw(69, 12, 20, 20, bowser_logo, 1);
+        display_screen(screen);
+        screen_clear(0, screen);
+        //hard
+        //roadwidth = ;
+    }
+    if (((getbtns() & 0x1) == 0x1)| (((getbtns() >> 1) & 0x1) == 0x1)){
+        left_right = (left_right + 1 )% 2;
+        delay(100);
+    }
+    
+    if (((getbtns() >> 2) & 0x1) == 0x1) {
+        gamestate = 2;
+        delay(1000);
+        screen_clear(0, screen);
+        //return roadwidth;
+
+        }
+
+}
 
 
+*/
