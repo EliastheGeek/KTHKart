@@ -40,6 +40,8 @@ void user_isr(void)
       game();
     } else if (gamestate == 3) {
       high_score();
+    } else if (gamestate == 4) {
+      end_screen();
     }
 
     IFSCLR(0) = 0x100;

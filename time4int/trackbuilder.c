@@ -106,10 +106,6 @@ void renderBackground()
 			timeArray[lapcount-1] = mytime;
 			mytime = 0x0000;
 			lapcount++;
-			if (lapcount > 3) {
-      			screen_clear(0, screen);
-      			gamestate = 3;
-    		}
 		}
 
 		while (selectedSection < 14 && sectionCheck <= distance) {

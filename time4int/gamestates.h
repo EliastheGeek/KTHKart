@@ -4,7 +4,7 @@ void title_screen(void);
 void menu(void);
 void game(void);
 void high_score(void);
-void end_screen(void);
+void end_screen();
 
 extern int gamestate;
 extern int mytime;
