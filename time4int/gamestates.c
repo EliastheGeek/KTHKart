@@ -6,7 +6,7 @@
 #include "gamestates.h"
 #include "menu.h"
 #include <string.h>
-
+ 
 int mytime = 0x0000;
 int timeArray[3];
 int timeoutcount = 0;
@@ -38,9 +38,12 @@ void menu(void) {
     if (menustate == 0) {
         pCharacter = choose_character();
     }
+    if (menustate == 1){
+        choose_difficulty(); //gamestate blir 2 efter detta
+    }
 }
 
-void game(void) {
+void game(void) { // was usr_isr before
     if ((getbtns() & 0x1) == 0x1) {
 			(*pCharacter).x += 2.5f;
       draw((int)(*pCharacter).x, 16, 15, 17, (*pCharacter).rightturn, 0);
@@ -66,10 +69,10 @@ void game(void) {
     timeoutcount++;
     display_update(2, 0, 15, 5);   
     display_string(2, textstring);
-    //För varv: 
+    //displays which lap:
     display_update(3, 99, 15, 4);
     display_string(3, lap_char);
-    //sprintf(lapcount_char, "%d", lapcount);
+
     display_update(1, 121, 15, 2);
     display_string(1, lapcount_char);
 
@@ -81,6 +84,7 @@ void game(void) {
 };
 
 void high_score(void) {
+  
   display_string(0, "Here are your times");
   display_update(0, 0, 0, 20);
 
@@ -114,8 +118,9 @@ void high_score(void) {
   screen_clear(0, screen);
 
   if (((getbtns() >> 2) & 0x1) == 0x1) {
-    gamestate = 4;
     screen_clear(0, screen);
+    gamestate = 4;
+
 
   }
 }
@@ -126,7 +131,7 @@ void end_screen(void){
   dvdY += yspeed;
   dvdX += xspeed;
 
-  display_screen(screen);
+  display_screen(screen);//if dvd touches screen edge it will bounce perpendicular:
   if (dvdY + 14 >= 32) {
     yspeed = -yspeed;
   }
@@ -142,8 +147,8 @@ void end_screen(void){
   if (dvdX <= 0) {
     xspeed = -xspeed;
   }
-  display_string(3, itoaconv((int)dvdX));
-  display_update(3, 0, 24, 3);
+  //display_string(3, itoaconv((int)dvdX));
+  //display_update(3, 0, 24, 3);
 
   screen_clear(0, screen);
 

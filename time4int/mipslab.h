@@ -49,6 +49,8 @@ extern const uint8_t dvd[60];
 extern uint8_t logo[96*4];
 extern uint8_t mario_logo[60];
 extern uint8_t bowser_logo[60];
+extern uint8_t easy_logo[242];
+extern uint8_t hard_logo[242];
 /* Declare text buffer for display output */
 extern char textbuffer[4][20];
 /* Declare functions written by students.

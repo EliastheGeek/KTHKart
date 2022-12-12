@@ -8,3 +8,4 @@ void choose_difficulty(void);
 void display_instructions(void);
 
 extern int menustate;
+extern float roadwidth_float;

@@ -181,7 +181,7 @@ void screen_clear(int x, uint8_t *screen) {
   for (i = 0; i < 512; i++) screen[i] = 0;
 }
 
-void draw(int xco ,int yco, int width, int height, const uint8_t *icon, int invert) {
+void draw(int xco ,int yco, int width, int height, const uint8_t *icon, int invert) {//draws an icon
       int x,y;
 
       for (x = xco; x < xco+width; x++) {
@@ -199,7 +199,7 @@ void draw(int xco ,int yco, int width, int height, const uint8_t *icon, int inve
       };
 }
 
-void bit_decision(int x, int y, uint8_t bit, uint8_t *screen) {
+void bit_decision(int x, int y, uint8_t bit, uint8_t *screen) { //turns on a pixel in a certain coordinate 
   if (x < 0 || x >= 128 || y < 0 || y >= 32) {
     return;
   }
